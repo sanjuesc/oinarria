@@ -1,5 +1,4 @@
 package ehu.isad.liburuak.controllers;
-
 import ehu.isad.liburuak.Book;
 import ehu.isad.liburuak.Liburuak;
 import javafx.collections.FXCollections;
@@ -48,8 +47,8 @@ public class LiburuKud {
 
     public List<Book> lortuLiburak(){
 
-        String query = "select isbn, izena from Liburu";
-        DBKudeatzailea dbKudeatzaile = DBKudeatzailea.getInstantzia();
+        String query = "select isbn,izena from Liburu";
+        DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
         ResultSet rs = dbKudeatzaile.execSQL(query);
 
         List<Book> emaitza = new ArrayList<>();

@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.Properties;
 
-public class DBKudeatzailea {
+public class DBKudeatzaile {
 
     Connection conn = null;
 
@@ -19,6 +19,7 @@ public class DBKudeatzailea {
             Class.forName("com.mysql.cj.jdbc.Driver").getConstructor().newInstance();
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", properties);
             conn.setCatalog(properties.getProperty("dbname"));
+            System.out.println(properties.getProperty("dbname"));
 
         } catch (SQLException ex) {
             // handle any errors
@@ -45,13 +46,13 @@ public class DBKudeatzailea {
     }
 
     // singleton patroia
-    private static DBKudeatzailea instantzia = new DBKudeatzailea();
+    private static DBKudeatzaile instantzia = new DBKudeatzaile();
 
-    private DBKudeatzailea() {
+    private DBKudeatzaile() {
         this.conOpen();
     }
 
-    public static DBKudeatzailea getInstantzia() {
+    public static DBKudeatzaile getInstantzia() {
         return instantzia;
     }
 
@@ -73,6 +74,4 @@ public class DBKudeatzailea {
         }
         return rs;
     }
-
-
 }
