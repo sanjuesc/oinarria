@@ -10,6 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 
+import java.math.BigInteger;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class LiburuKud {
 
     @FXML
@@ -34,14 +40,36 @@ public class LiburuKud {
     public void initialize() {
         comboBox.getItems().removeAll();
         ObservableList<Book> books = FXCollections.observableArrayList();
-        books.addAll(
-                new Book("1491910399", "R for Data Science"),
-                new Book("1491946008", "Fluent Python"),
-                new Book("9781491906187", "Data Algorithms")
-        );
+        books.addAll(lortuLiburak());
         comboBox.setItems(books);
 
     }
+
+
+    public List<Book> lortuLiburak(){
+
+        String query = "select isbn, izena from Liburu";
+        DBKudeatzailea dbKudeatzaile = DBKudeatzailea.getInstantzia();
+        ResultSet rs = dbKudeatzaile.execSQL(query);
+
+        List<Book> emaitza = new ArrayList<>();
+
+        try {
+            while (rs.next()) {
+
+                String isbn = rs.getString("isbn");
+                String izena = rs.getString("izena");
+                emaitza.add(new Book (isbn, izena));
+            }
+        } catch(SQLException throwables){
+            throwables.printStackTrace();
+        }
+
+        return emaitza;
+
+
+    }
+
 
 
 }
