@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.ResultSet;
 
 public class XehetasunakKud {
 
@@ -54,14 +55,28 @@ public class XehetasunakKud {
 
     public void egin(Book b) throws Exception {
         String isbn = b.getISBN();
-        book = this.getLib(isbn);
-        Details details = book.getDetails();
-        izenburuText.setText(details.getTitle());
-        argitalText.setText(details.getArgitaretxea());
-        orriKopText.setText(String.valueOf(details.getPages()));
-        String url = book.getThumbnail_url().replace("S", "L");
-        Image i = createImage(url);
-        irudiaField.setImage(i);
+        ResultSet xehe = getXehe(isbn);
+        if(xehe.next()){
+            izenburuText.setText(xehe.getString("title"));
+            argitalText.setText(xehe.getString("publisher"));
+            orriKopText.setText(String.valueOf(xehe.getInt("pages")));
+        }else{
+            book = this.getLib(isbn);
+            Details details = book.getDetails();
+            String title= details.getTitle();
+            izenburuText.setText(title);
+            String publisher = details.getArgitaretxea();
+            argitalText.setText(publisher);
+            String pages =String.valueOf(details.getPages());
+            orriKopText.setText(pages);
+            String query = "insert into Xehetasunak values('"+isbn+"','"+publisher+"','"+pages+"','"+title+"');";
+            System.out.println(query);
+            DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
+            ResultSet rs = dbKudeatzaile.execSQL(query);
+        }
+        //String url = book.getThumbnail_url().replace("S", "L");
+        //Image i = createImage(url);
+        //irudiaField.setImage(i);
     }
 
     private Image createImage(String url) throws IOException {
@@ -70,6 +85,13 @@ public class XehetasunakKud {
         try (InputStream stream = conn.getInputStream()) {
             return new Image(stream);
         }
+    }
+
+    public ResultSet getXehe(String isbn){
+        String query = "select isbn, publisher, pages, title from Xehetasunak where isbn = "+isbn;
+        DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
+        ResultSet rs = dbKudeatzaile.execSQL(query);
+        return rs;
     }
 
 }
