@@ -24,13 +24,13 @@ java {
 
 application {
     mainModule = 'oinarria' // name defined in module-info.java
-    mainClass = 'ehu.isad.Main'
+    mainClass = 'ehu.isad.liburuak.Liburuak'
 }
 
 
 
 // ext.moduleName = 'gradlejavafxhelloworld'
-mainClassName = "$moduleName/ehu.isad.Main"
+mainClassName = "$moduleName/ehu.isad.liburuak.Liburuak"
 
 
 javafx {
