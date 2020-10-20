@@ -1,14 +1,15 @@
-package ehu.isad.liburuak.controllers;
+package ehu.isad.liburuak.controllers.UI;
 
 import com.google.gson.Gson;
 import ehu.isad.liburuak.Book;
 import ehu.isad.liburuak.Details;
 import ehu.isad.liburuak.Liburuak;
+import ehu.isad.liburuak.controllers.DB.DBKudeatzaile;
+import ehu.isad.liburuak.controllers.DB.ZerbitzuKUD;
 import ehu.isad.liburuak.utils.Sarea;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.effect.ImageInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -61,7 +62,7 @@ public class XehetasunakKud {
 
     public void egin(Book b) throws Exception {
         String isbn = b.getISBN();
-        ResultSet xehe = getXehe(isbn);
+        ResultSet xehe = ZerbitzuKUD.getInstantzia().getXehe(isbn);
         if(xehe.next()){
             izenburuText.setText(xehe.getString("title"));
             argitalText.setText(xehe.getString("publisher"));
@@ -72,29 +73,31 @@ public class XehetasunakKud {
             book = this.getLib(isbn);
             Details details = book.getDetails();
             String title= details.getTitle();
-            izenburuText.setText(title);
             String publisher = details.getArgitaretxea();
-            argitalText.setText(publisher);
-            publisher = details.getArgitaretxea().replace("\'","\'\'"); //publisher moldatu datu baserako
             String pages =String.valueOf(details.getPages());
-            orriKopText.setText(pages);
-            String query = "insert into Xehetasunak values('"+isbn+"','"+publisher+"','"+pages+"','"+title+"');";
-            System.out.println(query);
-            DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
-            ResultSet rs = dbKudeatzaile.execSQL(query);
+            bistaratuXehetasunak(title, pages, publisher);
+            publisher = details.getArgitaretxea().replace("\'","\'\'"); //publisher moldatu datu baserako
+            ZerbitzuKUD.getInstantzia().sartuXehe(isbn, publisher, pages, title);
             String url = book.getThumbnail_url().replace("S", "L");
-            Image i = createImage(url);
             URL Url = new URL(url);
-
-            //Argazkia modu lokalean gorde
-            BufferedImage image = ImageIO.read(Url);
-            File outputfile = new File(isbn+".png");
-            ImageIO.write(image, "png", outputfile);
-
-
+            gordeArgazkia(Url, isbn);
+            Image i = createImage(url);
             irudiaField.setImage(i);
         }
 
+    }
+
+    private void gordeArgazkia(URL Url, String isbn) throws IOException {
+        BufferedImage image = ImageIO.read(Url);
+        File outputfile = new File(isbn+".png");
+        ImageIO.write(image, "png", outputfile);
+
+    }
+
+    private void bistaratuXehetasunak(String title, String pages, String publisher) {
+        orriKopText.setText(pages);
+        izenburuText.setText(title);
+        argitalText.setText(publisher);
     }
 
     private Image createImage(String url) throws IOException {
@@ -105,11 +108,6 @@ public class XehetasunakKud {
         }
     }
 
-    public ResultSet getXehe(String isbn){
-        String query = "select isbn, publisher, pages, title from Xehetasunak where isbn = "+isbn;
-        DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
-        ResultSet rs = dbKudeatzaile.execSQL(query);
-        return rs;
-    }
+
 
 }

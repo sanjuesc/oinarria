@@ -1,15 +1,15 @@
-package ehu.isad.liburuak.controllers;
+package ehu.isad.liburuak.controllers.UI;
 import ehu.isad.liburuak.Book;
 import ehu.isad.liburuak.Liburuak;
+import ehu.isad.liburuak.controllers.DB.DBKudeatzaile;
+import ehu.isad.liburuak.controllers.DB.ZerbitzuKUD;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.util.StringConverter;
 
-import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,33 +39,8 @@ public class LiburuKud {
     public void initialize() {
         comboBox.getItems().removeAll();
         ObservableList<Book> books = FXCollections.observableArrayList();
-        books.addAll(lortuLiburak());
+        books.addAll(ZerbitzuKUD.getInstantzia().lortuLiburak());
         comboBox.setItems(books);
-
-    }
-
-
-    public List<Book> lortuLiburak(){
-
-        String query = "select isbn,izena from Liburu";
-        DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
-        ResultSet rs = dbKudeatzaile.execSQL(query);
-
-        List<Book> emaitza = new ArrayList<>();
-
-        try {
-            while (rs.next()) {
-
-                String isbn = rs.getString("isbn");
-                String izena = rs.getString("izena");
-                emaitza.add(new Book (isbn, izena));
-            }
-        } catch(SQLException throwables){
-            throwables.printStackTrace();
-        }
-
-        return emaitza;
-
 
     }
 

@@ -1,8 +1,7 @@
-package ehu.isad.liburuak.controllers;
+package ehu.isad.liburuak.controllers.DB;
 
 import ehu.isad.liburuak.utils.Utils;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.Properties;
