@@ -85,9 +85,13 @@ public class XehetasunakKud {
             String url = book.getThumbnail_url().replace("S", "L");
             Image i = createImage(url);
             URL Url = new URL(url);
+
+            //Argazkia modu lokalean gorde
             BufferedImage image = ImageIO.read(Url);
             File outputfile = new File(isbn+".png");
             ImageIO.write(image, "png", outputfile);
+
+
             irudiaField.setImage(i);
         }
 
