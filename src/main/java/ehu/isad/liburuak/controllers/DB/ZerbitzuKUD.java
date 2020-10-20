@@ -61,7 +61,7 @@ public class ZerbitzuKUD {
 
     }
 
-    public void DBGarbitu(){ //ez da erabiltzen, probak egiterakoan argazkiak kentzeko erabiltzen nuen
+    public void DBGarbitu(){ //ez da erabiltzen, probak egiterakoan datu basean zeuden xehetasunak kentzeko erabiltzen nuen
         String query = "delete from Xehetasunak";
         DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
         dbKudeatzaile.execSQL(query);
@@ -75,6 +75,6 @@ public class ZerbitzuKUD {
             File f = new File(itr.next().getISBN()+".png");
             f.delete();
         }
-
+        //Metodo hau jadanik ez da erabiltzen, izan ere argazkiak gordetzen diren carpeta gitignore-n dago
     }
 }

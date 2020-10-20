@@ -7,6 +7,7 @@ import ehu.isad.liburuak.Liburuak;
 import ehu.isad.liburuak.controllers.DB.DBKudeatzaile;
 import ehu.isad.liburuak.controllers.DB.ZerbitzuKUD;
 import ehu.isad.liburuak.utils.Sarea;
+import ehu.isad.liburuak.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.ResultSet;
+import java.util.Properties;
 
 
 public class XehetasunakKud {
@@ -62,12 +64,13 @@ public class XehetasunakKud {
 
     public void egin(Book b) throws Exception {
         String isbn = b.getISBN();
+        Properties properties = Utils.lortuEzarpenak();
         ResultSet xehe = ZerbitzuKUD.getInstantzia().getXehe(isbn);
         if(xehe.next()){
             izenburuText.setText(xehe.getString("title"));
             argitalText.setText(xehe.getString("publisher"));
             orriKopText.setText(String.valueOf(xehe.getInt("pages")));
-            Image Image = new Image(new FileInputStream(isbn+".png"));
+            Image Image = new Image(new FileInputStream(properties.getProperty("path")+isbn+".png"));
             irudiaField.setImage(Image);
         }else{
             book = this.getLib(isbn);
@@ -88,8 +91,9 @@ public class XehetasunakKud {
     }
 
     private void gordeArgazkia(URL Url, String isbn) throws IOException {
+        Properties properties = Utils.lortuEzarpenak();
         BufferedImage image = ImageIO.read(Url);
-        File outputfile = new File(isbn+".png");
+        File outputfile = new File(properties.getProperty("path")+isbn+".png");
         ImageIO.write(image, "png", outputfile);
 
     }
