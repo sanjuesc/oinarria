@@ -3,9 +3,11 @@ package ehu.isad.liburuak.controllers.DB;
 import ehu.isad.liburuak.Book;
 import javafx.scene.image.Image;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ZerbitzuKUD {
@@ -55,7 +57,24 @@ public class ZerbitzuKUD {
     public void sartuXehe(String isbn, String publisher, String pages, String title) {
         String query = "insert into Xehetasunak values('"+isbn+"','"+publisher+"','"+pages+"','"+title+"');";
         DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
-        ResultSet rs = dbKudeatzaile.execSQL(query);
+        dbKudeatzaile.execSQL(query);
+
+    }
+
+    public void DBGarbitu(){ //ez da erabiltzen, probak egiterakoan argazkiak kentzeko erabiltzen nuen
+        String query = "delete from Xehetasunak";
+        DBKudeatzaile dbKudeatzaile = DBKudeatzaile.getInstantzia();
+        dbKudeatzaile.execSQL(query);
+    }
+
+    public void kenduArgazkiak(){ //ez da erabiltzen, probak egiterakoan argazkiak kentzeko erabiltzen nuen
+        String isbn = null; //horrez gain, ez ditut argazkiak github-era igo nahi
+        List<Book> liburuLista = lortuLiburak();
+        Iterator<Book> itr = liburuLista.iterator();
+        while(itr.hasNext()){
+            File f = new File(itr.next().getISBN()+".png");
+            f.delete();
+        }
 
     }
 }
