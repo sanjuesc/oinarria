@@ -69,6 +69,7 @@ public class Liburuak extends Application {
         stage.show();
     }
 
+
 }
 
 
