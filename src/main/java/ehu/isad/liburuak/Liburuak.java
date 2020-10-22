@@ -3,11 +3,18 @@ package ehu.isad.liburuak;
 
 import ehu.isad.liburuak.controllers.UI.LiburuKud;
 import ehu.isad.liburuak.controllers.UI.XehetasunakKud;
+import ehu.isad.liburuak.utils.Utils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Properties;
 
 public class Liburuak extends Application {
 
@@ -28,7 +35,7 @@ public class Liburuak extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
+        karpetaSortu();
         stage = primaryStage;
         pantailakKargatu();
 
@@ -68,7 +75,13 @@ public class Liburuak extends Application {
         stage.setScene(xeheScene);
         stage.show();
     }
-
+    public void karpetaSortu() throws IOException {
+        Properties properties = Utils.lortuEzarpenak();
+        Path path = Paths.get(properties.getProperty("path"));
+        if(!Files.exists(path)){
+            Files.createDirectories(path);
+        }
+    }
 
 }
 
