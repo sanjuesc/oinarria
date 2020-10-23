@@ -93,7 +93,7 @@ public class XehetasunakKud {
     private void gordeArgazkia(URL Url, String isbn) throws IOException {
         Properties properties = Utils.lortuEzarpenak();
         BufferedImage image = ImageIO.read(Url);
-        File outputfile = new File(properties.getProperty("path")+isbn+".png");
+        File outputfile = new File(properties.getProperty("imagePath")+isbn+".png");
         ImageIO.write(image, "png", outputfile);
 
     }

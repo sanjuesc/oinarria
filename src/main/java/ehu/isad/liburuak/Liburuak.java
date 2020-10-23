@@ -77,7 +77,7 @@ public class Liburuak extends Application {
     }
     public void karpetaSortu() throws IOException {
         Properties properties = Utils.lortuEzarpenak();
-        Path path = Paths.get(properties.getProperty("path"));
+        Path path = Paths.get(properties.getProperty("imagePath"));
         if(!Files.exists(path)){
             Files.createDirectories(path);
         }
